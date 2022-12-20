@@ -29,3 +29,17 @@ impl SerialClient {
         }
     }
 }
+
+
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    /** Todo: write serial port test */
+    #[test]
+    fn panic_port_open() {
+        // let serial_client = SerialClient::new("/dev/ttyUSB0", 115200);
+        assert_eq!(1, 1);
+    }
+}
