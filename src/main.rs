@@ -12,25 +12,10 @@ use serial::serial_client::SerialClient;
 async fn main() {
     let serial_client = SerialClient::new("/dev/tty.usbserial-0001", 115200);
 
-    let (mut mqtt_client, mut notifications) = MqttClient::create_mqtt_client();
-    mqtt_client.subscribe("hello/rumqtt", QoS::AtLeastOnce);
+    let mut mqtt_client = MqttClient::new("localhost", 1883);
 
     loop {
-        match notifications.eventloop.poll().await {
-            Ok(event) => {
-                println!("Event = {:?}", event);
-                if let Event::Incoming(packet) = event.clone() {
-                    if let Packet::Publish(publish) = packet {
-                        println!("Payload = {:?}", String::from_utf8_lossy(&publish.payload));
-                    }
-                }
-                Ok(event)
-            }
-            Err(err) => {
-                println!("ConnectionError = {:?}", err);
-                Err(err)
-            }
-        };
+        mqtt_client.listening_mqtt_broker().await;
     }
 }
 
